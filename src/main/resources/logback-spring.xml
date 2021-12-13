@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="projectName" value="api"/>
+    <property name="packageName" value="com.bruce.log"/>
+    <property name="appHome" value="./logs"/>
+    <!--  彩色日志依赖  -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%6p) %clr(${PID:- }){magenta} %clr([%5.25t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n"/>
+    <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${appHome}/api.log</file>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-10X{traceId} %-5level %logger:%L - %msg %n</Pattern>
+            <charset>UTF-8</charset> <!-- 设置字符集 -->
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${appHome}/canteen-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>15</maxHistory><!--日志文档保留天数-->
+        </rollingPolicy>
+    </appender>
+    <!-- 输出到控制台 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            <charset>UTF-8</charset> <!-- 设置字符集 -->
+        </encoder>
+    </appender>
+
+    <!-- 在开发环境下，不输出日志文件，只在控制台输出-->
+    <springProfile name="dev">
+        <!-- logger 用来指定包或某个具体的类，root 用来指定最基础的日志输出级别 -->
+        <logger name="${packageName}" level="debug"/>
+        <!-- 容器级日志 DEBUG < INFO < WARN < ERROR -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+
+    <!-- 线上环境 在4个文件和控制台 同时输出-->
+    <springProfile name="!dev">
+        <logger name="${packageName}" level="INFO"/>
+        <!-- 容器级日志 -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="LOG_FILE"/>
+        </root>
+    </springProfile>
+</configuration>

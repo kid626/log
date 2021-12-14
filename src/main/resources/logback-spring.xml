@@ -7,7 +7,7 @@
     <!--  彩色日志依赖  -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <property name="CONSOLE_LOG_PATTERN"
-              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%6p) %clr(${PID:- }){magenta} %clr([%5.25t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n"/>
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %-10X{traceId} %clr(%6p) %clr(${PID:- }){magenta} %clr([%5.25t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n"/>
     <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${appHome}/api.log</file>
         <encoder>
